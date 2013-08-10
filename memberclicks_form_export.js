@@ -1,16 +1,28 @@
 // ==UserScript==
-// @name	 MemberclicksFormExport
+// @name	 Memberclicks Form Export
 // @author	 lemonsqueeze
-// @version	 1.0
+// @version	 0.2
+// @downloadURL	 http://userscripts.org/scripts/source/175476.user.js
 // @namespace
 // @scriptsource
 // @published    2013-08-10 14:40
 // @description  Adds a button to export memberclicks forms (receipts) as CSV file
-// @include      https://*.memberclicks.net/*/formMgmt.do?*
+// @include      https://*.memberclicks.net/*/adminUI/quickForm/receipt/editReceipt.do?*
+// @grant	 none
 // ==/UserScript==
 
+var script_url = "http://userscripts.org/scripts/source/175476.user.js";
 
 /***************************************** extract answers ***************************************/
+
+function assert(val, msg)
+{
+    if (val)
+	return;
+    var s = "Memberclicks Form Export:\n" + msg;
+    alert(s);
+    throw(s);
+}
 
 // numbered questions
 var answers = {};		// by number, like answers['3']
@@ -34,8 +46,6 @@ function add_data(name, value)
 
 function handle_answer(n, value)
 {
-    //alert(field.innerText + "\n" + value.innerText);
-    
     if (!answers.hasOwnProperty(n))	// normal case
 	add_answer(n, value);
     else				// handle multiple answers
@@ -71,10 +81,15 @@ function extract_data()
     for (var i = 0; i < fields.length; i++)
     {
 	var field = fields[i];
-	var value = cleanup_value(field.nextElementSibling.innerText);
-	var m = field.innerText.match(/^([0-9]+)-/);
+	if (!field.nextElementSibling)
+	{
+	    alert("field " + field.textContent + "has no value !");
+	    continue;
+	}
+	var value = cleanup_value(field.nextElementSibling.textContent);
+	var m = field.textContent.match(/^([0-9]+)-/);
 	if (!m)		// not a question
-	    handle_data(field.innerText, value);
+	    handle_data(field.textContent, value);
 	else
 	{
 	    var n = m[1];	// question number
@@ -147,6 +162,8 @@ function output_csv()
     s += data.join(',') + '\n';		    // and answers ...
     
     save_file(s, 'text/csv');
+    //save_file(s, 'application/binary');
+    //save_file(s, 'text/plain');    
 }
     
 
@@ -161,10 +178,31 @@ function button_onclick()
 function add_button()
 {
     var d = document.createElement('div');
-    d.innerHTML = '<button style="float:right;">Export as CSV</button>';
+    d.innerHTML = '<button style="float:right; margin-right:20px;">Export as CSV</button>';
     var b = d.firstChild;
     b.onclick = button_onclick;
     document.body.insertBefore(b, document.body.firstChild);
 }
 
-add_button();
+function main()
+{
+    add_button();
+}
+
+/******************************************** debugging ******************************************/
+
+function load_script(url)
+{
+     var script = document.createElement('script');
+     script.type = 'text/javascript';
+     script.src = url;
+     document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+
+var debug = false;
+
+if (debug)	// load external script when debugging, can't debug greasemonkey scripts ...
+    load_script(script_url);
+else
+    main();
