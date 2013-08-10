@@ -1,0 +1,577 @@
+<html>
+  <head>
+    <!-- go get the javascript magic... -->
+    <script type="text/javascript" src="/mc/javascript/jquery-mcapp-1.6.js"></script>
+    <script type="text/javascript">jQuery.noConflict();</script>
+    <script type="text/javascript" src="/mc/javascript/jquery.tablednd-0.5.js"></script>
+    <!-- Includes: ui-dialog, ui-draggable, ui-droppable, ui-resizeable, ui-sortable, ui-accordion
+               ui-slider, ui-tabs, ui-datepicker, ui-effects -->
+    <script type="text/javascript" src="/mc/javascript/jquery-ui-1.8.13.custom.min.js"></script>
+    <link rel="stylesheet" href="/mc/styles/themes/base/ui.all.css">
+    <link rel="stylesheet" href="/mc/styles/jqueryui.css">
+    <script type="text/javascript">jQuery(function()
+{jQuery('#errorDialog').dialog({bgiframe:true,autoOpen:false,resizable:false,modal:true,overlay:{backgroundColor:'#000',opacity:0.5},buttons:{OK:function()
+{jQuery(this).dialog('close');}}});jQuery('#alertDialog').dialog({bgiframe:true,autoOpen:false,resizable:false,modal:true,overlay:{backgroundColor:'#000',opacity:0.5},buttons:{OK:function()
+{jQuery(this).dialog('close');}}});});function displayAlertDialog(title,alertText)
+{var alertTextPrefix='&lt;span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;">&lt;/span>';jQuery('#alertDialog').html(alertTextPrefix+alertText);jQuery('#alertDialog').dialog('option','title',title);openDialog(jQuery('#alertDialog'));}
+function displayErrorDialog(errorText)
+{var errorTextPrefix='&lt;span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;">&lt;/span>Error: ';jQuery('#errorDialog').html(errorTextPrefix+errorText);openDialog(jQuery('#errorDialog'));}
+(function(jQuery)
+{checkBlank=function(id,textId,text)
+{if(isWhitespace(jQuery(id).val()))
+{jQuery(id).addClass('ui-state-error');jQuery(textId).text(text);return false;}
+else
+{jQuery(id).removeClass('ui-state-error');return true;}};validEmail=function(str)
+{var at="@"
+var dot="."
+var lat=str.indexOf(at)
+var lstr=str.length
+var ldot=str.indexOf(dot)
+if(str.indexOf(at)==-1)
+{return false}
+if(str.indexOf(at)==-1||str.indexOf(at)==0||str.indexOf(at)==lstr)
+{return false}
+if(str.indexOf(dot)==-1||str.indexOf(dot)==0||str.indexOf(dot)==lstr)
+{return false}
+if(str.indexOf(at,(lat+1))!=-1)
+{return false}
+if(str.substring(lat-1,lat)==dot||str.substring(lat+1,lat+2)==dot)
+{return false}
+if(str.indexOf(dot,(lat+2))==-1)
+{return false}
+if(str.indexOf(" ")!=-1)
+{return false}
+return true};checkValidEmail=function(id,textId,text)
+{if(!isWhitespace(jQuery(id).val()))
+{if(!validEmail(jQuery(id).val()))
+{jQuery(id).addClass('ui-state-error');jQuery(textId).text(text);return false;}
+else
+{return true;}}
+else
+{return false;}};})(jQuery);function openDialog(dialog)
+{centerDialogInParent(dialog)}
+function getBrowserWidth()
+{return window.parent.innerWidth||document.documentElement.clientWidth||document.body.clientWidth;}
+function getBrowserHeight()
+{return window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;}
+function getParentBrowserWidth()
+{return parent.window.parent.innerWidth||parent.document.documentElement.clientWidth||parent.document.body.clientWidth;}
+function getParentBrowserHeight()
+{return parent.window.innerHeight||parent.document.documentElement.clientHeight||parent.document.body.clientHeight;}
+function centerDialogInParent(dialog)
+{if(dialog!=null)
+{var scrollY=parent.document.documentElement.scrollTop||parent.document.body.scrollTop;dialog.dialog('open');if(parent.document.documentElement.scrollTop)
+{parent.document.documentElement.scrollTop=scrollY;}
+else
+{parent.document.body.scrollTop=scrollY;}
+var y=0;var browserHeight=getParentBrowserHeight();var windowHeight=dialog.height()+100;var heightDiff=browserHeight-windowHeight;if(heightDiff>0)
+{y=(heightDiff/2);}
+else
+{y=0;}
+var headerHeight=0;if(parent.document.getElementById('mcFrame')!=null)
+{headerHeight=parent.document.getElementById('mcFrame').offsetTop;}
+scrollY=parent.document.documentElement.scrollTop||parent.document.body.scrollTop;y-=(headerHeight-scrollY);if(y&lt;=0)
+{y=0;}
+var iFrameHeight=document.getElementById('bodyDiv').scrollHeight;var bufferHeight=50;if((y+windowHeight+bufferHeight)>iFrameHeight)
+{y=iFrameHeight-(windowHeight+bufferHeight);}
+if(y&lt;=0)
+{y=0;}
+dialog.dialog('option','position',['center',y]);}}</script>
+    <script type="text/javascript">jQuery(function(){jQuery('#sessionExpiredDialog').dialog({bgiframe:true,title:'Attention!',autoOpen:false,draggable:false,closeOnEscape:false,close:function(event,ui){if(jQuery("#adminSessionRefreshText").length){sendSession();}},resizable:false,modal:true,zIndex:999999,overlay:{backgroundColor:'#000',opacity:0.5}});});</script>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Catholic Marriage Preparation - Form Management</title>
+    <!-- Javascript functions -->
+    <script type="text/javascript" src="/mc/javascript/common.js"></script>
+    <script type="text/javascript" src="/mc/javascript/dates.js"></script>
+    <script type="text/javascript" src="/mc/javascript/profile.js"></script>
+    <script type="text/javascript" src="/mc/javascript/validateForm.js"></script>
+    <script type="text/javascript">function submitSelectProfileForm(action){if(document.frmSelectProfile){document.frmSelectProfile.action=action;document.frmSelectProfile.submit();}
+else{document.frmMastHead.action=action;document.frmMastHead.submit();}}
+function myProfile()
+{window.location.href="/mc/profile/viewServiceProfile.do?userId=13018399";}
+function getUserId()
+{return"13018399";}
+var browserVer=parseInt(navigator.appVersion);if((navigator.appName=="Netscape")&amp;&amp;(browserVer=="4")){var browser="evil";}
+else if((navigator.userAgent.indexOf("Mac")!=-1)&amp;&amp;(navigator.appName=="Microsoft Internet Explorer")){var browser="annoying";}
+else{var browser="good";}
+function reloadPage(init){if(init==true)with(navigator){if((appName=="Netscape")&amp;&amp;(parseInt(appVersion)==4)){document.MM_pgW=innerWidth;document.MM_pgH=innerHeight;onresize=reloadPage;}}
+else if(innerWidth!=document.MM_pgW||innerHeight!=document.MM_pgH)location.reload();}
+reloadPage(true);function findObj(n,d){var p,i,x;if(!d)d=document;if((p=n.indexOf("?"))>0&amp;&amp;parent.frames.length){d=parent.frames[n.substring(p+1)].document;n=n.substring(0,p);}
+if(!(x=d[n])&amp;&amp;d.all)x=d.all[n];for(i=0;!x&amp;&amp;i&lt;d.forms.length;i++)x=d.forms[i][n];for(i=0;!x&amp;&amp;d.layers&amp;&amp;i&lt;d.layers.length;i++)x=findObj(n,d.layers[i].document);if(!x&amp;&amp;d.getElementById)x=d.getElementById(n);return x;}
+function autoLayers(){var g,b,k,f,args=autoLayers.arguments;a=parseInt(args[0]);if(isNaN(a))a=0;if(!document.p7setc){p7c=new Array();document.p7setc=true;for(var u=0;u&lt;10;u++){p7c[u]=new Array();}}for(k=0;k&lt;p7c[a].length;k++){if((g=findObj(p7c[a][k]))!=null){b=(document.layers)?g:g.style;b.visibility="hidden";}}for(k=1;k&lt;args.length;k++){if((g=findObj(args[k]))!=null){b=(document.layers)?g:g.style;b.visibility="visible";f=false;for(var j=0;j&lt;p7c[a].length;j++){if(args[k]==p7c[a][j]){f=true;}}
+if(!f){p7c[a][p7c[a].length++]=args[k];}}}}
+function Snap(){var x,y,ox,bx,oy,p,tx,a,b,k,d,da,e,el,tw,q0,xx,yy,w1,pa='px',args=Snap.arguments;a=parseInt(a);if(document.layers||window.opera){pa='';}for(k=0;k&lt;(args.length);k+=4){if((g=findObj(args[k]))!=null){if((el=findObj(args[k+1]))!=null){a=parseInt(args[k+2]);b=parseInt(args[k+3]);x=0;y=0;ox=0;oy=0;p="";tx=1;da="document.all['"+args[k]+"']";if(document.getElementById){d="document.getElementsByName('"+args[k]+"')[0]";if(!eval(d)){d="document.getElementById('"+args[k]+"')";if(!eval(d)){d=da;}}}else if(document.all){d=da;}if(document.all||document.getElementById){while(tx==1){p+=".offsetParent";if(eval(d+p)){x+=parseInt(eval(d+p+".offsetLeft"));y+=parseInt(eval(d+p+".offsetTop"));}else{tx=0;}}ox=parseInt(g.offsetLeft);oy=parseInt(g.offsetTop);tw=x+ox+y+oy;if(tw==0||(navigator.appVersion.indexOf("MSIE 4")>-1&amp;&amp;navigator.appVersion.indexOf("Mac")>-1)){ox=0;oy=0;if(g.style.left){x=parseInt(g.style.left);y=parseInt(g.style.top);}else{w1=parseInt(el.style.width);bx=(a&lt;0)?-5-w1:-10;a=(Math.abs(a)&lt;1000)?0:a;b=(Math.abs(b)&lt;1000)?0:b;x=document.body.scrollLeft+event.clientX+bx;y=document.body.scrollTop+event.clientY;}}}else if(document.layers){x=g.x;y=g.y;q0=document.layers,dd="";for(var s=0;s&lt;q0.length;s++){dd='document.'+q0[s].name;if(eval(dd+'.document.'+args[k])){x+=eval(dd+'.left');y+=eval(dd+'.top');break;}}}e=(document.layers)?el:el.style;xx=parseInt(x+ox+a),yy=parseInt(y+oy+b);if(navigator.appVersion.indexOf("MSIE 5")>-1&amp;&amp;navigator.appVersion.indexOf("Mac")>-1){xx+=parseInt(document.body.leftMargin);yy+=parseInt(document.body.topMargin);}
+e.left=xx+pa;e.top=yy+pa;}}}}
+function snapWithShim()
+{var x,y,ox,bx,oy,p,tx,a,b,k,d,da,e,el,tw,q0,xx,yy,w1;var pa='px';var args=snapWithShim.arguments;a=parseInt(a);if(document.layers||window.opera)
+{pa='';}
+for(k=0;k&lt;(args.length);k+=4)
+{if((g=findObj(args[k]))!=null)
+{if((el=findObj(args[k+1]))!=null)
+{a=parseInt(args[k+2]);b=parseInt(args[k+3]);x=0;y=0;ox=0;oy=0;p="";tx=1;da="document.all['"+args[k]+"']";if(document.getElementById)
+{d="document.getElementsByName('"+args[k]+"')[0]";if(!eval(d))
+{d="document.getElementById('"+args[k]+"')";if(!eval(d))
+{d=da;}}}
+else if(document.all)
+{d=da;}
+if(document.all||document.getElementById)
+{while(tx==1)
+{p+=".offsetParent";if(eval(d+p))
+{x+=parseInt(eval(d+p+".offsetLeft"));y+=parseInt(eval(d+p+".offsetTop"));}
+else
+{tx=0;}}
+ox=parseInt(g.offsetLeft);oy=parseInt(g.offsetTop);tw=x+ox+y+oy;if(tw==0||(navigator.appVersion.indexOf("MSIE 4")>-1&amp;&amp;navigator.appVersion.indexOf("Mac")>-1))
+{ox=0;oy=0;if(g.style.left)
+{x=parseInt(g.style.left);y=parseInt(g.style.top);}
+else
+{w1=parseInt(el.style.width);bx=(a&lt;0)?-5-w1:-10;a=(Math.abs(a)&lt;1000)?0:a;b=(Math.abs(b)&lt;1000)?0:b;x=document.body.scrollLeft+event.clientX+bx;y=document.body.scrollTop+event.clientY;}}}
+else if(document.layers)
+{x=g.x;y=g.y;q0=document.layers;dd="";for(var s=0;s&lt;q0.length;s++)
+{dd='document.'+q0[s].name;if(eval(dd+'.document.'+args[k]))
+{x+=eval(dd+'.left');y+=eval(dd+'.top');break;}}}
+e=(document.layers)?el:el.style;xx=parseInt(x+ox+a);yy=parseInt(y+oy+b);if(navigator.appVersion.indexOf("MSIE 5")>-1&amp;&amp;navigator.appVersion.indexOf("Mac")>-1)
+{xx+=parseInt(document.body.leftMargin);yy+=parseInt(document.body.topMargin);}
+e.left=xx+pa;e.top=yy+pa;if(k==4)
+{var ie=(navigator.appVersion.indexOf("MSIE")!=-1);var oldShimmer=document.getElementById('adminShimmer');var shimmer=document.createElement('iframe');shimmer.id='adminShimmer';shimmer.style.position='absolute';shimmer.style.width=el.offsetWidth;shimmer.style.height=parseInt(el.offsetHeight)-parseInt(el.style.borderBottomWidth);shimmer.style.left=a+'px';shimmer.style.zIndex=el.style.zIndex-1;shimmer.setAttribute('frameborder','0');if(ie)
+{shimmer.style.top=(0-b)+'px';}
+else
+{shimmer.style.top=(b+18)+'px';}
+if(oldShimmer!=null)
+{if(oldShimmer.style.width!=shimmer.style.width||oldShimmer.style.height!=shimmer.style.height||oldShimmer.style.left!=shimmer.style.left||oldShimmer.style.top!=shimmer.style.top)
+{removeShimFromElement('adminShimmerDiv');var shimmerDiv=document.getElementById('adminShimmerDiv');shimmerDiv.appendChild(shimmer);}}
+else
+{var shimmerDiv=document.getElementById('adminShimmerDiv');shimmerDiv.appendChild(shimmer);}}}
+else
+{removeShimFromElement('adminShimmerDiv');}}}}
+function removeShimFromElement(element)
+{var el=document.getElementById(element);if(el!=null)
+{for(var child=el.firstChild;child!=null;child=child.nextSibling)
+{if(child!=null&amp;&amp;child.id.indexOf('adminShimmer')==0)
+{el.removeChild(child);}}}}
+function checkForExpiration(){if(document.getElementById("adminSessionRefreshText")){jQuery("#adminSessionRefreshText").replaceWith("&lt;span class=\"adminRegularText\">&lt;b>Your login has expired.&lt;/b>&lt;br>&lt;br>&lt;a href=\'/mc/prelogin.do?hidOrgID=cmp\'>&lt;b>Click here&lt;/b>&lt;/a> to log in again.&lt;br>&lt;br>&lt;/span>");jQuery('#sessionExpiredDialog').unbind('dialogclose');jQuery('#sessionExpiredDialog').bind('dialogclose',function(event,ui){document.location.href='/mc/prelogin.do?hidOrgID=cmp';});}else{}}
+function sendSession(){document.getElementById('sessionFrame').src="/mc/refreshSession.do";}
+function openRefreshingWindow(){jQuery('#sessionExpiredDialog').html('&lt;span id=\"adminSessionRefreshText\" class=\"visDiv\">&lt;span class=\"adminRegularText\">Your login will expire in the next five minutes due to inactivity.  Please click the link below to refresh your login.&lt;br>&lt;br>&lt;br>&lt;center>&lt;a href=\'javascript:void(0);\' onClick=\'jQuery("#sessionExpiredDialog").dialog("close");\'>&lt;b>Refresh my login&lt;/b>&lt;/a>&lt;/center>&lt;br>&lt;/span>&lt;/span>');jQuery('#sessionExpiredDialog').dialog('open');setTimeout('checkForExpiration()',300000);}
+function openSessionExpiredWindow()
+{jQuery("#sessionExpiredDialog").html("&lt;span class=\"adminRegularText\">&lt;b>Your login has expired.&lt;/b>&lt;br>&lt;br>"+"&lt;a href=\"/administrator/\" target=\"_parent\">&lt;b>Click here&lt;/b>&lt;/a> to log in again.&lt;br>&lt;br>&lt;/span>");jQuery('#sessionExpiredDialog').unbind('dialogclose');jQuery('#sessionExpiredDialog').bind('dialogclose',function(event,ui)
+{parent.location.href='/administrator/';});openDialog(jQuery('#sessionExpiredDialog'));}
+function showHelp(uri)
+{window.open("","HelpCenter","height=680,width=840,resizable=yes,scrollbars=yes,status=yes,menubar=no,location=no,personalbar=no,toolbar=no,titlebar=yes");document.helpCenterForm.helpUri.value=uri;document.helpCenterForm.submit();}
+function showVideo(uri)
+{window.open(uri,"OnlineTrainingVideos","height=720,width=950,resizable=yes,scrollbars=yes,status=yes,menubar=no,location=no,personalbar=no,toolbar=no,titlebar=yes");}
+function createHelpToolbarButton(parent)
+{var helpButton=parent.document.createElement('td');helpButton.id='toolbar-help';helpButton.className='button';var helpLink=parent.document.createElement('a');helpLink.className='toolbar';helpLink.href='/mc/admin/zenDesk.do?article=&amp;mcID=66949ddc-408d-4b99-871e-cf03a1ba799f';helpLink.target='_blank';var helpSpan=parent.document.createElement('span');helpSpan.className='icon-32-help';helpSpan.title='Help';helpLink.appendChild(helpSpan);helpLink.appendChild(parent.document.createTextNode('Help'));helpButton.appendChild(helpLink);return helpButton;}
+function insertHelpLink()
+{var toolbarHelp=parent.document.getElementById('toolbar-help');if(toolbarHelp!=null)
+{toolbarHelp.parentNode.removeChild(toolbarHelp);}}
+function resizeIFrame()
+{if(self!=parent)
+{parent.resize();}}</script>
+    <link rel="stylesheet" href="https://data.memberclicks.com/site/cmp/cmp.css">
+    <link rel="stylesheet" href="/mc/styles/memberclicks.css">
+    <link rel="stylesheet" href="https://data.memberclicks.com/site/cmp/cmp.css">
+    <link rel="stylesheet" href="/mc/styles/adminui.css">
+  </head>
+  <body onload="insertHelpLink();">
+    <div id="bodyDiv">
+      <script type="text/javascript">var inAdminPage=true;</script>
+      <div class="adminIFrameContainer">
+        <!--  Message Section -->
+        <!--  Error Message Section -->
+        <table cellpadding="0" cellspacing="0" width="100%" border="0">
+          <tbody>
+            <tr>
+              <td width="18">
+                <img src="https://data.memberclicks.com/images/ab_tl.gif" height="36" width="18" border="0">
+              </td>
+              <td background="https://data.memberclicks.com/images/ab_t.gif" class="adminABHeader" id="adminABHeader" nowrap="">
+                
+            
+                
+
+
+
+
+2- God's Plan for Humanity (Receipt 6426835)
+
+                <a href="javascript:printAdminContent();">
+                  <img src="https://data.memberclicks.com/images/icons/printfriendly.gif" alt="Print" height="17" width="21" border="0" align="absmiddle">
+                </a>
+              </td>
+              <td width="22">
+                <img src="https://data.memberclicks.com/images/ab_tr.gif" height="36" width="22" border="0">
+              </td>
+            </tr>
+            <tr>
+              <td background="https://data.memberclicks.com/images/ab_l.gif">
+                <img src="https://data.memberclicks.com/images/spacer.gif" height="10" width="18" border="0">
+              </td>
+              <td class="adminABBody">
+                <!-- INSERT PAGE BODY -->
+                <script type="text/javascript">try
+{var toolbar=parent.document.getElementById('toolbar');if(toolbar!=null)
+{var tb=jQuery(toolbar);if(tb.find("tr").find("#toolbar-receipt").length&lt;1)
+{if(!parent.document.getElementById('toolbar-cancel'))
+{tb.find("tr").append('&lt;td class="button" id="toolbar-receipt"> '+'&lt;a href="/administrator/index.php?option=com_mcadmin&amp;linkId=92&amp;userId=25055368"'+' class="toolbar"> &lt;span class="icon-32-receipt-list" title="Cancel"> &lt;/span> Profile Receipt List &lt;/a> &lt;/td>');}
+else
+{tb.find("tr").append('&lt;td class="button" id="toolbar-receipt"> '+'&lt;a href="/administrator/index.php?option=com_mcadmin&amp;linkId=88&amp;formId=23209"'+' class="toolbar"> &lt;span class="icon-32-receipt-list" title="Cancel"> &lt;/span> Form Receipt List &lt;/a> &lt;/td>');}}}}catch(e){}
+function viewTestTransactionPage()
+{window.open("/mc/quickForm/mgmt/noPermissionReceiptDetails.jsp","Error","height=200,width=510,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function viewTransactionPage(receiptId,transactionId,paymentTypeId)
+{var url="/mc/quickForm/receipt/viewTransaction.do?receiptId="+receiptId+"&amp;transactionId="+transactionId+"&amp;paymentTypeId="+paymentTypeId+"&amp;formId="+23209;window.open(url,"Transaction","height=250,width=380,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=1");}
+function viewGatewayTransactionPage(receiptId,transactionId,paymentTypeId)
+{var url="/mc/quickForm/receipt/viewTransaction.do?receiptId="+receiptId+"&amp;transactionId="+transactionId+"&amp;paymentTypeId="+paymentTypeId+"&amp;formId="+23209;window.open(url,"Transaction","height=320,width=380,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function retryTransaction(receiptId,transactionId,paymentTypeId,amount)
+{var url="/mc/adminUI/quickForm/payment/viewRetryEftTransaction.do?receiptId="+receiptId+"&amp;transactionId="+transactionId+"&amp;paymentTypeId="+paymentTypeId+"&amp;formId="+23209+"&amp;amount="+amount;if(confirm("Are you sure you want to retry this transaction?"))
+{window.location=url;}}
+function viewOfflineCreditCardPage(receiptId,transactionId,paymentTypeId)
+{var url="/mc/quickForm/receipt/viewTransaction.do?receiptId="+receiptId+"&amp;transactionId="+transactionId+"&amp;paymentTypeId="+paymentTypeId+"&amp;formId="+23209;window.open(url,"Transaction","height=450,width=380,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function addTransaction(receiptId,invoice)
+{var url="/mc/quickForm/receipt/addTransaction.do?receiptId="+receiptId+"&amp;formId="+23209;if(invoice)
+{url=url+"&amp;invoice=true";}
+window.open(url,"Transaction","height=430,width=480,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function deleteTransaction(receiptId,transactionId,paymentTypeId)
+{if(confirm("Are you sure you want to delete this transaction?"))
+{window.location="/mc/adminUI/quickForm/receipt/deleteTransaction.do?receiptId="+receiptId+"&amp;transactionId="+transactionId+"&amp;paymentTypeId="+paymentTypeId+"&amp;formId="+23209;}}
+function editRefund(receiptId,transactionId,windowHeight)
+{var url="/mc/quickForm/receipt/editRefund.do?receiptId="+receiptId+"&amp;transactionId="+transactionId+"&amp;formId="+23209;window.open(url,"Transaction","height="+windowHeight+",width=480,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function cancelRecurringTransaction(receiptId,recurringTransactionId)
+{if(confirm("Are you sure you want to cancel this transaction?"))
+{window.location="/mc/adminUI/quickForm/receipt/cancelRecurringTransaction.do?receiptId="+receiptId+"&amp;recurringTransactionId="+recurringTransactionId+"&amp;formId="+23209;}}
+function cancelAllRecurringTransaction(receiptId)
+{if(confirm("Are you sure you want to cancel all remaining recurring transactions?"))
+{window.location="/mc/adminUI/quickForm/receipt/cancelAllRecurringTransaction.do?receiptId="+receiptId+"&amp;formId="+23209;}}
+function settleRecurringTransaction(receiptId)
+{if(confirm("Are you sure you want to settle the remaining recurring transaction balance?\n\n"+"$0.00"+" will be charged to the user's account."))
+{window.location="/mc/adminUI/quickForm/receipt/settleRecurringTransaction.do?receiptId="+receiptId+"&amp;formId="+23209;}}
+function editPaymentInfo(receiptId)
+{var url="/mc/quickForm/receipt/editPaymentInfo.do?receiptId="+receiptId+"&amp;formId="+23209;window.open(url,"PaymentInfo","height=450,width=480,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function viewInvoice(uuId)
+{window.parent.location.href="https://cmp.memberclicks.net/administrator/index.php?option=com_mcinvoice&amp;view=invoice&amp;id="+uuId+"&amp;receiptId=6426835&amp;returnType=1";}</script>
+                <div class="adminSummaryArea">
+                  <span class="adminSummaryHeader">
+                    <table cellpadding="0" cellspacing="0" border="0" width="90%">
+                      <tbody>
+                        <tr>
+                          <td class="adminSummaryHeaderText">
+                            <font color="#703637">Plan of God - Assignment 2 of 9</font>
+                          </td>
+                          <td align="right">
+                            <a href="/mc/adminUI/quickForm/receipt/editReceiptSection.do?formId=23209&receiptId=6426835&pageId=132358&receiptOrigin=0&userId=25055368" onmouseover="setStatus('Edit Receipt Section');return true;" onmouseout="resetStatus();return true;" class="adminIconLink">
+                              <img src="https://data.memberclicks.com/images/icons/edit.gif" height="17" width="19" align="absmiddle" border="0" style="margin-right:3px;" alt="edit">
+                              Edit
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </span>
+                  <br>
+                  <b>His First Name:</b>
+                  <span class="adminResponseClass">Clark</span>
+                  <br>
+                  <b>His Last Name:</b>
+                  <span class="adminResponseClass">KENT</span>
+                  <br>
+                  <b>His Email:</b>
+                  <span class="adminResponseClass">clark.kent@dailyplanet.com</span>
+                  <br>
+                  <b>Her First Name:</b>
+                  <span class="adminResponseClass">Lois</span>
+                  <br>
+                  <b>Her Last Name:</b>
+                  <span class="adminResponseClass">LANE</span>
+                  <br>
+                  <b>Her Email:</b>
+                  <span class="adminResponseClass">lois.lane@dailyplanet.com</span>
+                  <br>
+                  <b>God's Plan:</b>
+                  <span class="adminResponseClass">
+                    
+                        Yes
+                    <br>
+                  </span>
+                  <b>Instructors:</b>
+                  <span class="adminResponseClass">
+                    
+                        ROB and JULIE
+                    <br>
+                  </span>
+                  <br>
+                </div>
+                <br>
+                <div class="adminSummaryArea">
+                  <span class="adminSummaryHeader">
+                    <table cellpadding="0" cellspacing="0" border="0" width="90%">
+                      <tbody>
+                        <tr>
+                          <td class="adminSummaryHeaderText">
+                            <font color="#703637">IN THE BEGINNING... GOD'S PLAN FOR HUMANITY - Assignment 2 of 9</font>
+                          </td>
+                          <td align="right">
+                            <a href="/mc/adminUI/quickForm/receipt/editReceiptSection.do?formId=23209&receiptId=6426835&pageId=132359&receiptOrigin=0&userId=25055368" onmouseover="setStatus('Edit Receipt Section');return true;" onmouseout="resetStatus();return true;" class="adminIconLink">
+                              <img src="https://data.memberclicks.com/images/icons/edit.gif" height="17" width="19" align="absmiddle" border="0" style="margin-right:3px;" alt="edit">
+                              Edit
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </span>
+                  <br>
+                  <b>1- Who is the author of Marriage:</b>
+                  <span class="adminResponseClass">
+                    
+                        God
+                    <br>
+                  </span>
+                  <b>2- HUMANITY'S VOCATION:</b>
+                  <span class="adminResponseClass">I have given you means for survival go forward to live and multiply</span>
+                  <br>
+                  <b>3- GOD IS (his answer):</b>
+                  <span class="adminResponseClass">Creator of mankind</span>
+                  <br>
+                  <b>3- GOD IS (her answer):</b>
+                  <span class="adminResponseClass">Omnipresent and omnipotent power who is always with us</span>
+                  <br>
+                  <b>4- MAN MADE OF?:</b>
+                  <span class="adminResponseClass">Clay</span>
+                  <br>
+                  <b>5- MAN'S PERSONALITY:</b>
+                  <span class="adminResponseClass">
+                    
+                        practical and active
+                    <br>
+                  </span>
+                  <b>6- MAN'S MISSIONS:</b>
+                  <span class="adminResponseClass">Not to eat from tree of knowledge, find partner, name all things</span>
+                  <br>
+                  <b>7- IMAGE GOD HOW?:</b>
+                  <span class="adminResponseClass">Man is master of all animals and birds and has been given gods breath of life</span>
+                  <br>
+                  <br>
+                </div>
+                <br>
+                <div class="adminSummaryArea">
+                  <span class="adminSummaryHeader">
+                    <table cellpadding="0" cellspacing="0" border="0" width="90%">
+                      <tbody>
+                        <tr>
+                          <td class="adminSummaryHeaderText"> </td>
+                          <td align="right">
+                            <a href="/mc/adminUI/quickForm/receipt/editReceiptSection.do?formId=23209&receiptId=6426835&pageId=108841&receiptOrigin=0&userId=25055368" onmouseover="setStatus('Edit Receipt Section');return true;" onmouseout="resetStatus();return true;" class="adminIconLink">
+                              <img src="https://data.memberclicks.com/images/icons/edit.gif" height="17" width="19" align="absmiddle" border="0" style="margin-right:3px;" alt="edit">
+                              Edit
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </span>
+                  <br>
+                  <b>8- DEEP SLEEP?:</b>
+                  <span class="adminResponseClass">God knows best for man and will reveal things at the right time</span>
+                  <br>
+                  <b>9- WOMAN'S PERSONALITY?:</b>
+                  <span class="adminResponseClass">
+                    
+                        Spiritual and sensitive
+                    <br>
+                  </span>
+                  <b>10- WOMAN'S MISSIONS?:</b>
+                  <span class="adminResponseClass">Mother of the living
+Partner for the man</span>
+                  <br>
+                  <b>11- RECEIVE FROM?:</b>
+                  <span class="adminResponseClass">God</span>
+                  <br>
+                  <b>12- NAKED NO SHAME:</b>
+                  <span class="adminResponseClass">That man and woman should be together - if they are supposed to be together nothing material is needed</span>
+                  <br>
+                  <b>13- DEFINITION OF SIN:</b>
+                  <span class="adminResponseClass">Doing something that is spiritually wrong</span>
+                  <br>
+                  <b>14- SERPENT DISTORTS:</b>
+                  <span class="adminResponseClass">You certainly will not die</span>
+                  <br>
+                  <b>15- WOMAN DISTORTS:</b>
+                  <span class="adminResponseClass">Tree in the middle of the garden, not e tree of good and bad</span>
+                  <br>
+                  <b>16- REASONS TO EAT:</b>
+                  <span class="adminResponseClass">Tree was good for food, pleasing to the eye and desirable for gaining wisdom. It means temptation. Things you think are good for you mi not be</span>
+                  <br>
+                  <b>17- SIN IN WOMAN'S MISSIONS?:</b>
+                  <span class="adminResponseClass">She did what God asked her not to do</span>
+                  <br>
+                  <br>
+                </div>
+                <br>
+                <div class="adminSummaryArea">
+                  <span class="adminSummaryHeader">
+                    <table cellpadding="0" cellspacing="0" border="0" width="90%">
+                      <tbody>
+                        <tr>
+                          <td class="adminSummaryHeaderText"> </td>
+                          <td align="right">
+                            <a href="/mc/adminUI/quickForm/receipt/editReceiptSection.do?formId=23209&receiptId=6426835&pageId=108849&receiptOrigin=0&userId=25055368" onmouseover="setStatus('Edit Receipt Section');return true;" onmouseout="resetStatus();return true;" class="adminIconLink">
+                              <img src="https://data.memberclicks.com/images/icons/edit.gif" height="17" width="19" align="absmiddle" border="0" style="margin-right:3px;" alt="edit">
+                              Edit
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </span>
+                  <br>
+                  <b>18- WHERE WAS THE MAN?:</b>
+                  <span class="adminResponseClass">Not with her, should have been with her to be one body</span>
+                  <br>
+                  <b>19- SIN IN MAN'S MISSIONS?:</b>
+                  <span class="adminResponseClass">Not there for his wife</span>
+                  <br>
+                  <b>20- REALIZE THEY ARE NAKED:</b>
+                  <span class="adminResponseClass">Because they had eaten fruit from the tree of knowledge</span>
+                  <br>
+                  <b>21- FIRST CONSEQUENCE OF SIN:</b>
+                  <span class="adminResponseClass">Strain relationship with God, you want to hide yourself from him, you anger God</span>
+                  <br>
+                  <b>22- NEXT CONSEQUENCES:</b>
+                  <span class="adminResponseClass">Realise naked and hide from God</span>
+                  <br>
+                  <b>23- ALL OTHER CONSEQUENCES:</b>
+                  <span class="adminResponseClass">Blame other people for actions, no responsibility</span>
+                  <br>
+                  <b>24- DISTORT COUPLE'S RELATIONSHIP:</b>
+                  <span class="adminResponseClass">Creates hierarchy, woman shall urge for husband and he shall be your master</span>
+                  <br>
+                  <br>
+                </div>
+                <br>
+                <div class="adminSummaryArea">
+                  <span class="adminSummaryHeader">
+                    <table cellpadding="0" cellspacing="0" border="0" width="90%">
+                      <tbody>
+                        <tr>
+                          <td class="adminSummaryHeaderText"> </td>
+                          <td align="right">
+                            <a href="/mc/adminUI/quickForm/receipt/editReceiptSection.do?formId=23209&receiptId=6426835&pageId=108843&receiptOrigin=0&userId=25055368" onmouseover="setStatus('Edit Receipt Section');return true;" onmouseout="resetStatus();return true;" class="adminIconLink">
+                              <img src="https://data.memberclicks.com/images/icons/edit.gif" height="17" width="19" align="absmiddle" border="0" style="margin-right:3px;" alt="edit">
+                              Edit
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </span>
+                  <br>
+                  <b>25- GOD'S FIRST REACTION:</b>
+                  <span class="adminResponseClass">Questions why they know they are naked</span>
+                  <br>
+                  <b>26- OBTAIN FROM THEM?:</b>
+                  <span class="adminResponseClass">The truth, and he obtains instead excuses and blame</span>
+                  <br>
+                  <b>27- WHAT IS THIS FRUIT? (his answer):</b>
+                  <span class="adminResponseClass">Temptation</span>
+                  <br>
+                  <b>27- What is this fruit? (her answer):</b>
+                  <span class="adminResponseClass">Temptation</span>
+                  <br>
+                  <b>28- WHY NOT EAT IT?:</b>
+                  <span class="adminResponseClass">To test them to see if they would sin</span>
+                  <br>
+                  <b>29- PERCEIVE GOD AS (his answer):</b>
+                  <span class="adminResponseClass">Beholder of judgement</span>
+                  <br>
+                  <b>29- Perceive God as (her answer):</b>
+                  <span class="adminResponseClass">Wants us to pay for our sins</span>
+                  <br>
+                  <b>30- PROMISE OF REDEMPTION:</b>
+                  <span class="adminResponseClass">V 22 and 23 - garden of Eden and fruit for eternal life still exists</span>
+                  <br>
+                  <br>
+                </div>
+                <br>
+                <script type="text/javascript">var parentReceiptLink="";jQuery(function()
+{jQuery('#childReceiptDialog').dialog({bgiframe:true,autoOpen:false,resizable:false,modal:true,overlay:{backgroundColor:'#000',opacity:0.5},buttons:{Yes:function()
+{window.location=parentReceiptLink;jQuery(this).dialog('close');},No:function()
+{jQuery(this).dialog('close');}}});});</script>
+                <script type="text/javascript">jQuery(function()
+{jQuery('#createInvoiceNotice').dialog({bgiframe:true,autoOpen:false,resizable:false,modal:true,overlay:{backgroundColor:'#000',opacity:0.5},buttons:{OK:function()
+{jQuery(this).dialog('close');}}});});</script>
+                <!-- END PAGE BODY -->
+              </td>
+              <td background="https://data.memberclicks.com/images/ab_r.gif">
+                <img src="https://data.memberclicks.com/images/spacer.gif" height="10" width="22" border="0">
+              </td>
+            </tr>
+            <tr>
+              <td width="18">
+                <img src="https://data.memberclicks.com/images/ab_bl.gif" height="21" width="18" border="0">
+              </td>
+              <td background="https://data.memberclicks.com/images/ab_b.gif" style="height:21px;background-position:0 0;background-repeat:repeat-x;">
+                <img src="https://data.memberclicks.com/images/spacer.gif" height="21" width="22" border="0">
+              </td>
+              <td width="22">
+                <img src="https://data.memberclicks.com/images/ab_br.gif" height="21" width="22" border="0">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="display: none; z-index: 999999; outline-color: currentColor; outline-width: 0px; outline-style: none;" class="ui-dialog ui-widget ui-widget-content ui-corner-all " tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-sessionExpiredDialog">
+      <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+        <span class="ui-dialog-title" id="ui-dialog-title-sessionExpiredDialog">Attention!</span>
+        <a href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button">
+          <span class="ui-icon ui-icon-closethick">close</span>
+        </a>
+      </div>
+      <div id="sessionExpiredDialog" style="" class="ui-dialog-content ui-widget-content"></div>
+    </div>
+    <div style="display: none; z-index: 1000; outline-color: currentColor; outline-width: 0px; outline-style: none;" class="ui-dialog ui-widget ui-widget-content ui-corner-all  ui-draggable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-childReceiptDialog">
+      <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+        <span class="ui-dialog-title" id="ui-dialog-title-childReceiptDialog">Child Receipt</span>
+        <a href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button">
+          <span class="ui-icon ui-icon-closethick">close</span>
+        </a>
+      </div>
+      <div id="childReceiptDialog" style="" class="ui-dialog-content ui-widget-content">
+        <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+        <div>This receipt is tied to a parent receipt.  All edits should take place with that receipt.</div>
+        <br>
+        
+    Would you like to edit the parent receipt?
+
+      </div>
+      <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+        <div class="ui-dialog-buttonset">
+          <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button">
+            <span class="ui-button-text">Yes</span>
+          </button>
+          <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button">
+            <span class="ui-button-text">No</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div style="display: none; z-index: 1000; outline-color: currentColor; outline-width: 0px; outline-style: none;" class="ui-dialog ui-widget ui-widget-content ui-corner-all  ui-draggable" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-createInvoiceNotice">
+      <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+        <span class="ui-dialog-title" id="ui-dialog-title-createInvoiceNotice">Create Invoice</span>
+        <a href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button">
+          <span class="ui-icon ui-icon-closethick">close</span>
+        </a>
+      </div>
+      <div id="createInvoiceNotice" style="" class="ui-dialog-content ui-widget-content">
+        <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+        <div>The receipt balance is now different than the original amount invoiced. Please create a new invoice or settle the balance to reflect your changes.</div>
+      </div>
+      <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+        <div class="ui-dialog-buttonset">
+          <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button">
+            <span class="ui-button-text">OK</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

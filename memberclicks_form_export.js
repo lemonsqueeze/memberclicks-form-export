@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name	 Memberclicks Form Export
 // @author	 lemonsqueeze
-// @version	 0.2
+// @version	 0.3
 // @downloadURL	 http://userscripts.org/scripts/source/175476.user.js
 // @namespace
 // @scriptsource
-// @published    2013-08-10 14:40
+// @published    2013-08-12 14:40
 // @description  Adds a button to export memberclicks forms (receipts) as CSV file
 // @include      https://*.memberclicks.net/*/adminUI/quickForm/receipt/editReceipt.do?*
 // @grant	 none
@@ -24,39 +24,14 @@ function assert(val, msg)
     throw(s);
 }
 
-// numbered questions
-var answers = {};		// by number, like answers['3']
-var numbers = [];		// question numbers
-
-// non question fields (name, first name ...)
+// form fields
 var values = {};		// name/value pairs
 var names = [];			
-
-function add_answer(n, value)
-{
-    answers[n] = value;
-    numbers.push(n);    
-}
 
 function add_data(name, value)
 {
     values[name] = value;
     names.push(name);
-}
-
-function handle_answer(n, value)
-{
-    if (!answers.hasOwnProperty(n))	// normal case
-	add_answer(n, value);
-    else				// handle multiple answers
-    {
-	var tmp = answers[n];
-	delete answers[n];
-	numbers.pop();
-	
-	add_answer(n + 'a', tmp);
-	add_answer(n + 'b', value);
-    }
 }
 
 function handle_data(name, value)
@@ -87,23 +62,8 @@ function extract_data()
 	    continue;
 	}
 	var value = cleanup_value(field.nextElementSibling.textContent);
-	var m = field.textContent.match(/^([0-9]+)-/);
-	if (!m)		// not a question
-	    handle_data(field.textContent, value);
-	else
-	{
-	    var n = m[1];	// question number
-	    handle_answer(n, value);
-	}
+	handle_data(field.textContent, value);
     }
-}
-
-function dump_answers()
-{
-    numbers.forEach(function(n)
-    {
-	alert(n + '\n' + answers[n]);
-    });
 }
 
 /***************************************** output csv ***************************************/
@@ -123,23 +83,6 @@ function csv_escape(s)
     return s;
 }
 
-// answers
-function column_answer(n)
-{
-    return 'answer' + n;
-}
-
-function data_answer(n)
-{
-    return answers[n];
-}
-
-// extra stuff
-function column_name(n)
-{
-    return n;
-}
-
 function data_name(n)
 {
     return values[n];
@@ -149,15 +92,13 @@ function output_csv()
 {
     var s = "";
 
-    var columns =              names.map(column_name);
-    columns = columns.concat(numbers.map(column_answer));
-    var data =           names.map(data_name);
-    data = data.concat(numbers.map(data_answer));
+    var columns = names;
+    var data =    names.map(data_name);
 
     columns = columns.map(csv_escape);
     data = data.map(csv_escape);
     
-    // comma separated column names (extra_stuff,answer1,answer2,answer3 ...)
+    // comma separated column names
     s += columns.join(',') + '\n';
     s += data.join(',') + '\n';		    // and answers ...
     

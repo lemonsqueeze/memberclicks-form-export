@@ -1,0 +1,10 @@
+
+*** By default greasemonkey userscripts don't run on local files ! ***
+To be able to test on local files you need to:
+- open 'about:config' in firefox and set
+  extensions.greasemonkey.fileIsGreaseable  to true
+- in greasemonkey preferences for the script, edit it and insert a
+    // @include  file://*
+  directive at the top
+
+now you should be able to test locally.
