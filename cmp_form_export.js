@@ -1,17 +1,17 @@
 // ==UserScript==
-// @name	 Memberclicks Form Export
+// @name	 CMP Form Export
 // @author	 lemonsqueeze
 // @version	 0.2
-// @downloadURL	 http://userscripts.org/scripts/source/175476.user.js
+// @downloadURL	 http://userscripts.org/scripts/source/175685.user.js
 // @namespace
 // @scriptsource
 // @published    2013-08-10 14:40
-// @description  Adds a button to export memberclicks forms (receipts) as CSV file
-// @include      https://*.memberclicks.net/*/adminUI/quickForm/receipt/editReceipt.do?*
+// @description  Adds a button to export CMP memberclicks forms (receipts) as CSV file
+// @include      https://cmp.memberclicks.net/*/adminUI/quickForm/receipt/editReceipt.do?*
 // @grant	 none
 // ==/UserScript==
 
-var script_url = "http://userscripts.org/scripts/source/175476.user.js";
+var script_url = "http://userscripts.org/scripts/source/175685.user.js";
 
 /***************************************** extract answers ***************************************/
 
