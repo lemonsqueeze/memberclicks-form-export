@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name	 Memberclicks Form Export
 // @author	 lemonsqueeze
-// @version	 0.4
+// @version	 0.5
 // @downloadURL	 http://userscripts.org/scripts/source/175476.user.js
-// @namespace
-// @scriptsource
-// @published    2013-08-12 14:40
+// @namespace	 http://userscripts.org/scripts/source/175476.user.js
+// @scriptsource http://userscripts.org/scripts/source/175476.user.js
+// @published    2013-08-14 16:00
 // @description  Adds a button to export memberclicks forms (receipts) as CSV file
 // @include      https://*.memberclicks.net/*/adminUI/quickForm/receipt/editReceipt.do?*
 // @grant	 none
@@ -93,8 +93,9 @@ function save_file(s, mime_type)
 
 function csv_escape(s)
 {
-    s = s.replace(/,/g, '.');		// turn commas into dots, can't have commas inside the answers ...
-    s = s.replace(/\n/g, ' ');		// turn newlines into spaces
+    s = s.replace(/\n/g, ' ');		// turn newlines into spaces    
+    s = s.replace(/\"/g, '""');		// escape quotes
+    s = '"' + s + '"';			// ... and quote the whole thing
     return s;
 }
 
@@ -114,8 +115,8 @@ function output_csv()
     data = data.map(csv_escape);
     
     // comma separated column names
-    s += columns.join(',') + '\n';
-    s += data.join(',') + '\n';		    // and answers ...
+    s += columns.join(',') + '\r\n';
+    s += data.join(',') + '\r\n';		    // and answers ...
     
     save_file(s, 'text/csv');
     //save_file(s, 'application/binary');
