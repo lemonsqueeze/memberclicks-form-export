@@ -1,0 +1,609 @@
+<html><head>
+    
+
+
+
+<!-- go get the javascript magic... -->
+
+
+<script type="text/javascript" src="editReceipt.do_files/jquery-mcapp-1.js"></script>
+<script type="text/javascript">jQuery.noConflict();</script>
+
+<script type="text/javascript" src="editReceipt.do_files/jquery.js"></script>
+
+<!-- Includes: ui-dialog, ui-draggable, ui-droppable, ui-resizeable, ui-sortable, ui-accordion
+               ui-slider, ui-tabs, ui-datepicker, ui-effects -->
+<script type="text/javascript" src="editReceipt.do_files/jquery-ui-1.js"></script>
+
+<link rel="stylesheet" href="editReceipt.do_files/ui.css">
+<link rel="stylesheet" href="editReceipt.do_files/jqueryui.css">
+
+<script type="text/javascript">jQuery(function()
+{jQuery('#errorDialog').dialog({bgiframe:true,autoOpen:false,resizable:false,modal:true,overlay:{backgroundColor:'#000',opacity:0.5},buttons:{OK:function()
+{jQuery(this).dialog('close');}}});jQuery('#alertDialog').dialog({bgiframe:true,autoOpen:false,resizable:false,modal:true,overlay:{backgroundColor:'#000',opacity:0.5},buttons:{OK:function()
+{jQuery(this).dialog('close');}}});});function displayAlertDialog(title,alertText)
+{var alertTextPrefix='<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>';jQuery('#alertDialog').html(alertTextPrefix+alertText);jQuery('#alertDialog').dialog('option','title',title);openDialog(jQuery('#alertDialog'));}
+function displayErrorDialog(errorText)
+{var errorTextPrefix='<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>Error: ';jQuery('#errorDialog').html(errorTextPrefix+errorText);openDialog(jQuery('#errorDialog'));}
+(function(jQuery)
+{checkBlank=function(id,textId,text)
+{if(isWhitespace(jQuery(id).val()))
+{jQuery(id).addClass('ui-state-error');jQuery(textId).text(text);return false;}
+else
+{jQuery(id).removeClass('ui-state-error');return true;}};validEmail=function(str)
+{var at="@"
+var dot="."
+var lat=str.indexOf(at)
+var lstr=str.length
+var ldot=str.indexOf(dot)
+if(str.indexOf(at)==-1)
+{return false}
+if(str.indexOf(at)==-1||str.indexOf(at)==0||str.indexOf(at)==lstr)
+{return false}
+if(str.indexOf(dot)==-1||str.indexOf(dot)==0||str.indexOf(dot)==lstr)
+{return false}
+if(str.indexOf(at,(lat+1))!=-1)
+{return false}
+if(str.substring(lat-1,lat)==dot||str.substring(lat+1,lat+2)==dot)
+{return false}
+if(str.indexOf(dot,(lat+2))==-1)
+{return false}
+if(str.indexOf(" ")!=-1)
+{return false}
+return true};checkValidEmail=function(id,textId,text)
+{if(!isWhitespace(jQuery(id).val()))
+{if(!validEmail(jQuery(id).val()))
+{jQuery(id).addClass('ui-state-error');jQuery(textId).text(text);return false;}
+else
+{return true;}}
+else
+{return false;}};})(jQuery);function openDialog(dialog)
+{centerDialogInParent(dialog)}
+function getBrowserWidth()
+{return window.parent.innerWidth||document.documentElement.clientWidth||document.body.clientWidth;}
+function getBrowserHeight()
+{return window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight;}
+function getParentBrowserWidth()
+{return parent.window.parent.innerWidth||parent.document.documentElement.clientWidth||parent.document.body.clientWidth;}
+function getParentBrowserHeight()
+{return parent.window.innerHeight||parent.document.documentElement.clientHeight||parent.document.body.clientHeight;}
+function centerDialogInParent(dialog)
+{if(dialog!=null)
+{var scrollY=parent.document.documentElement.scrollTop||parent.document.body.scrollTop;dialog.dialog('open');if(parent.document.documentElement.scrollTop)
+{parent.document.documentElement.scrollTop=scrollY;}
+else
+{parent.document.body.scrollTop=scrollY;}
+var y=0;var browserHeight=getParentBrowserHeight();var windowHeight=dialog.height()+100;var heightDiff=browserHeight-windowHeight;if(heightDiff>0)
+{y=(heightDiff/2);}
+else
+{y=0;}
+var headerHeight=0;if(parent.document.getElementById('mcFrame')!=null)
+{headerHeight=parent.document.getElementById('mcFrame').offsetTop;}
+scrollY=parent.document.documentElement.scrollTop||parent.document.body.scrollTop;y-=(headerHeight-scrollY);if(y<=0)
+{y=0;}
+var iFrameHeight=document.getElementById('bodyDiv').scrollHeight;var bufferHeight=50;if((y+windowHeight+bufferHeight)>iFrameHeight)
+{y=iFrameHeight-(windowHeight+bufferHeight);}
+if(y<=0)
+{y=0;}
+dialog.dialog('option','position',['center',y]);}}</script>
+
+
+
+<script type="text/javascript">jQuery(function(){jQuery('#sessionExpiredDialog').dialog({bgiframe:true,title:'Attention!',autoOpen:false,draggable:false,closeOnEscape:false,close:function(event,ui){if(jQuery("#adminSessionRefreshText").length){sendSession();}},resizable:false,modal:true,zIndex:999999,overlay:{backgroundColor:'#000',opacity:0.5}});});</script>
+
+
+
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
+
+    <title>Catholic Marriage Preparation - Form Management</title>
+
+
+<!-- Javascript functions -->
+<script type="text/javascript" src="editReceipt.do_files/common.js"></script>
+<script type="text/javascript" src="editReceipt.do_files/dates.js"></script>
+<script type="text/javascript" src="editReceipt.do_files/profile.js"></script>
+<script type="text/javascript" src="editReceipt.do_files/validateForm.js"></script>
+
+
+
+<script type="text/javascript">function submitSelectProfileForm(action){if(document.frmSelectProfile){document.frmSelectProfile.action=action;document.frmSelectProfile.submit();}
+else{document.frmMastHead.action=action;document.frmMastHead.submit();}}
+function myProfile()
+{window.location.href="/mc/profile/viewMyProfile.do?userId=11557490";}
+function getUserId()
+{return"11557490";}
+var browserVer=parseInt(navigator.appVersion);if((navigator.appName=="Netscape")&&(browserVer=="4")){var browser="evil";}
+else if((navigator.userAgent.indexOf("Mac")!=-1)&&(navigator.appName=="Microsoft Internet Explorer")){var browser="annoying";}
+else{var browser="good";}
+function reloadPage(init){if(init==true)with(navigator){if((appName=="Netscape")&&(parseInt(appVersion)==4)){document.MM_pgW=innerWidth;document.MM_pgH=innerHeight;onresize=reloadPage;}}
+else if(innerWidth!=document.MM_pgW||innerHeight!=document.MM_pgH)location.reload();}
+reloadPage(true);function findObj(n,d){var p,i,x;if(!d)d=document;if((p=n.indexOf("?"))>0&&parent.frames.length){d=parent.frames[n.substring(p+1)].document;n=n.substring(0,p);}
+if(!(x=d[n])&&d.all)x=d.all[n];for(i=0;!x&&i<d.forms.length;i++)x=d.forms[i][n];for(i=0;!x&&d.layers&&i<d.layers.length;i++)x=findObj(n,d.layers[i].document);if(!x&&d.getElementById)x=d.getElementById(n);return x;}
+function autoLayers(){var g,b,k,f,args=autoLayers.arguments;a=parseInt(args[0]);if(isNaN(a))a=0;if(!document.p7setc){p7c=new Array();document.p7setc=true;for(var u=0;u<10;u++){p7c[u]=new Array();}}for(k=0;k<p7c[a].length;k++){if((g=findObj(p7c[a][k]))!=null){b=(document.layers)?g:g.style;b.visibility="hidden";}}for(k=1;k<args.length;k++){if((g=findObj(args[k]))!=null){b=(document.layers)?g:g.style;b.visibility="visible";f=false;for(var j=0;j<p7c[a].length;j++){if(args[k]==p7c[a][j]){f=true;}}
+if(!f){p7c[a][p7c[a].length++]=args[k];}}}}
+function Snap(){var x,y,ox,bx,oy,p,tx,a,b,k,d,da,e,el,tw,q0,xx,yy,w1,pa='px',args=Snap.arguments;a=parseInt(a);if(document.layers||window.opera){pa='';}for(k=0;k<(args.length);k+=4){if((g=findObj(args[k]))!=null){if((el=findObj(args[k+1]))!=null){a=parseInt(args[k+2]);b=parseInt(args[k+3]);x=0;y=0;ox=0;oy=0;p="";tx=1;da="document.all['"+args[k]+"']";if(document.getElementById){d="document.getElementsByName('"+args[k]+"')[0]";if(!eval(d)){d="document.getElementById('"+args[k]+"')";if(!eval(d)){d=da;}}}else if(document.all){d=da;}if(document.all||document.getElementById){while(tx==1){p+=".offsetParent";if(eval(d+p)){x+=parseInt(eval(d+p+".offsetLeft"));y+=parseInt(eval(d+p+".offsetTop"));}else{tx=0;}}ox=parseInt(g.offsetLeft);oy=parseInt(g.offsetTop);tw=x+ox+y+oy;if(tw==0||(navigator.appVersion.indexOf("MSIE 4")>-1&&navigator.appVersion.indexOf("Mac")>-1)){ox=0;oy=0;if(g.style.left){x=parseInt(g.style.left);y=parseInt(g.style.top);}else{w1=parseInt(el.style.width);bx=(a<0)?-5-w1:-10;a=(Math.abs(a)<1000)?0:a;b=(Math.abs(b)<1000)?0:b;x=document.body.scrollLeft+event.clientX+bx;y=document.body.scrollTop+event.clientY;}}}else if(document.layers){x=g.x;y=g.y;q0=document.layers,dd="";for(var s=0;s<q0.length;s++){dd='document.'+q0[s].name;if(eval(dd+'.document.'+args[k])){x+=eval(dd+'.left');y+=eval(dd+'.top');break;}}}e=(document.layers)?el:el.style;xx=parseInt(x+ox+a),yy=parseInt(y+oy+b);if(navigator.appVersion.indexOf("MSIE 5")>-1&&navigator.appVersion.indexOf("Mac")>-1){xx+=parseInt(document.body.leftMargin);yy+=parseInt(document.body.topMargin);}
+e.left=xx+pa;e.top=yy+pa;}}}}
+function snapWithShim()
+{var x,y,ox,bx,oy,p,tx,a,b,k,d,da,e,el,tw,q0,xx,yy,w1;var pa='px';var args=snapWithShim.arguments;a=parseInt(a);if(document.layers||window.opera)
+{pa='';}
+for(k=0;k<(args.length);k+=4)
+{if((g=findObj(args[k]))!=null)
+{if((el=findObj(args[k+1]))!=null)
+{a=parseInt(args[k+2]);b=parseInt(args[k+3]);x=0;y=0;ox=0;oy=0;p="";tx=1;da="document.all['"+args[k]+"']";if(document.getElementById)
+{d="document.getElementsByName('"+args[k]+"')[0]";if(!eval(d))
+{d="document.getElementById('"+args[k]+"')";if(!eval(d))
+{d=da;}}}
+else if(document.all)
+{d=da;}
+if(document.all||document.getElementById)
+{while(tx==1)
+{p+=".offsetParent";if(eval(d+p))
+{x+=parseInt(eval(d+p+".offsetLeft"));y+=parseInt(eval(d+p+".offsetTop"));}
+else
+{tx=0;}}
+ox=parseInt(g.offsetLeft);oy=parseInt(g.offsetTop);tw=x+ox+y+oy;if(tw==0||(navigator.appVersion.indexOf("MSIE 4")>-1&&navigator.appVersion.indexOf("Mac")>-1))
+{ox=0;oy=0;if(g.style.left)
+{x=parseInt(g.style.left);y=parseInt(g.style.top);}
+else
+{w1=parseInt(el.style.width);bx=(a<0)?-5-w1:-10;a=(Math.abs(a)<1000)?0:a;b=(Math.abs(b)<1000)?0:b;x=document.body.scrollLeft+event.clientX+bx;y=document.body.scrollTop+event.clientY;}}}
+else if(document.layers)
+{x=g.x;y=g.y;q0=document.layers;dd="";for(var s=0;s<q0.length;s++)
+{dd='document.'+q0[s].name;if(eval(dd+'.document.'+args[k]))
+{x+=eval(dd+'.left');y+=eval(dd+'.top');break;}}}
+e=(document.layers)?el:el.style;xx=parseInt(x+ox+a);yy=parseInt(y+oy+b);if(navigator.appVersion.indexOf("MSIE 5")>-1&&navigator.appVersion.indexOf("Mac")>-1)
+{xx+=parseInt(document.body.leftMargin);yy+=parseInt(document.body.topMargin);}
+e.left=xx+pa;e.top=yy+pa;if(k==4)
+{var ie=(navigator.appVersion.indexOf("MSIE")!=-1);var oldShimmer=document.getElementById('adminShimmer');var shimmer=document.createElement('iframe');shimmer.id='adminShimmer';shimmer.style.position='absolute';shimmer.style.width=el.offsetWidth;shimmer.style.height=parseInt(el.offsetHeight)-parseInt(el.style.borderBottomWidth);shimmer.style.left=a+'px';shimmer.style.zIndex=el.style.zIndex-1;shimmer.setAttribute('frameborder','0');if(ie)
+{shimmer.style.top=(0-b)+'px';}
+else
+{shimmer.style.top=(b+18)+'px';}
+if(oldShimmer!=null)
+{if(oldShimmer.style.width!=shimmer.style.width||oldShimmer.style.height!=shimmer.style.height||oldShimmer.style.left!=shimmer.style.left||oldShimmer.style.top!=shimmer.style.top)
+{removeShimFromElement('adminShimmerDiv');var shimmerDiv=document.getElementById('adminShimmerDiv');shimmerDiv.appendChild(shimmer);}}
+else
+{var shimmerDiv=document.getElementById('adminShimmerDiv');shimmerDiv.appendChild(shimmer);}}}
+else
+{removeShimFromElement('adminShimmerDiv');}}}}
+function removeShimFromElement(element)
+{var el=document.getElementById(element);if(el!=null)
+{for(var child=el.firstChild;child!=null;child=child.nextSibling)
+{if(child!=null&&child.id.indexOf('adminShimmer')==0)
+{el.removeChild(child);}}}}
+function checkForExpiration(){if(document.getElementById("adminSessionRefreshText")){jQuery("#adminSessionRefreshText").replaceWith("<span class=\"adminRegularText\"><b>Your login has expired.</b><br><br><a href=\'/mc/prelogin.do?hidOrgID=cmp\'><b>Click here</b></a> to log in again.<br><br></span>");jQuery('#sessionExpiredDialog').unbind('dialogclose');jQuery('#sessionExpiredDialog').bind('dialogclose',function(event,ui){document.location.href='/mc/prelogin.do?hidOrgID=cmp';});}else{}}
+function sendSession(){document.getElementById('sessionFrame').src="/mc/refreshSession.do";}
+function openRefreshingWindow(){jQuery('#sessionExpiredDialog').html('<span id=\"adminSessionRefreshText\" class=\"visDiv\"><span class=\"adminRegularText\">Your login will expire in the next five minutes due to inactivity.  Please click the link below to refresh your login.<br><br><br><center><a href=\'javascript:void(0);\' onClick=\'jQuery("#sessionExpiredDialog").dialog("close");\'><b>Refresh my login</b></a></center><br></span></span>');jQuery('#sessionExpiredDialog').dialog('open');setTimeout('checkForExpiration()',300000);}
+function openSessionExpiredWindow()
+{jQuery("#sessionExpiredDialog").html("<span class=\"adminRegularText\"><b>Your login has expired.</b><br><br>"+"<a href=\"/administrator/\" target=\"_parent\"><b>Click here</b></a> to log in again.<br><br></span>");jQuery('#sessionExpiredDialog').unbind('dialogclose');jQuery('#sessionExpiredDialog').bind('dialogclose',function(event,ui)
+{parent.location.href='/administrator/';});openDialog(jQuery('#sessionExpiredDialog'));}
+function showHelp(uri)
+{window.open("","HelpCenter","height=680,width=840,resizable=yes,scrollbars=yes,status=yes,menubar=no,location=no,personalbar=no,toolbar=no,titlebar=yes");document.helpCenterForm.helpUri.value=uri;document.helpCenterForm.submit();}
+function showVideo(uri)
+{window.open(uri,"OnlineTrainingVideos","height=720,width=950,resizable=yes,scrollbars=yes,status=yes,menubar=no,location=no,personalbar=no,toolbar=no,titlebar=yes");}
+function createHelpToolbarButton(parent)
+{var helpButton=parent.document.createElement('td');helpButton.id='toolbar-help';helpButton.className='button';var helpLink=parent.document.createElement('a');helpLink.className='toolbar';helpLink.href='/administrator/index.php?option=com_mczendesk&view=zendesk&article=&mcID=f76193cd-9fd8-4d4f-ae63-63645cc69362';helpLink.target='_blank';var helpSpan=parent.document.createElement('span');helpSpan.className='icon-32-help';helpSpan.title='Help';helpLink.appendChild(helpSpan);helpLink.appendChild(parent.document.createTextNode('Help'));helpButton.appendChild(helpLink);return helpButton;}
+function insertHelpLink()
+{var toolbarHelp=parent.document.getElementById('toolbar-help');if(toolbarHelp!=null)
+{toolbarHelp.parentNode.removeChild(toolbarHelp);}}
+function resizeIFrame()
+{if(self!=parent)
+{parent.resize();}}</script>
+
+<link rel="stylesheet" href="editReceipt.do_files/cmp.css">
+
+
+
+    <link rel="stylesheet" href="editReceipt.do_files/memberclicks.css">
+    <link rel="stylesheet" href="editReceipt.do_files/cmp.css">
+    <link rel="stylesheet" href="editReceipt.do_files/adminui.css">
+</head>
+
+<body onload="insertHelpLink();">
+<div id="bodyDiv">
+
+
+
+<script type="text/javascript">var inAdminPage=true;</script>
+
+<div class="adminIFrameContainer">
+
+    <!--  Message Section -->
+    
+
+    <!--  Error Message Section -->
+    
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tbody><tr>
+            <td width="18"><img src="editReceipt.do_files/ab_tl.gif" height="36" border="0" width="18"></td>
+            <td class="adminABHeader" id="adminABHeader" background="editReceipt.do_files/ab_t.gif" nowrap="nowrap">
+            
+                
+
+
+
+
+7- Forgiveness - Your Body is a Temple (Receipt 6460595)
+<a href="javascript:printAdminContent();"><img src="editReceipt.do_files/printfriendly.gif" alt="Print" height="17" align="absmiddle" border="0" width="21"></a>
+
+            
+            </td>
+            <td width="22"><img src="editReceipt.do_files/ab_tr.gif" height="36" border="0" width="22"></td>
+        </tr>
+        <tr>
+            <td background="editReceipt.do_files/ab_l.gif"><img src="editReceipt.do_files/spacer.gif" height="10" border="0" width="18"></td>
+            <td class="adminABBody">
+                <!-- INSERT PAGE BODY -->
+                
+
+
+
+
+
+
+
+
+<script type="text/javascript">try
+{var toolbar=parent.document.getElementById('toolbar');if(toolbar!=null)
+{var tb=jQuery(toolbar);if(tb.find("tr").find("#toolbar-receipt").length<1)
+{if(!parent.document.getElementById('toolbar-cancel'))
+{tb.find("tr").append('<td class="button" id="toolbar-receipt"> '+'<a href="/administrator/index.php?option=com_mcadmin&linkId=92&userId=24308196"'+' class="toolbar"> <span class="icon-32-receipt-list" title="Cancel"> </span> Profile Receipt List </a> </td>');}
+else
+{tb.find("tr").append('<td class="button" id="toolbar-receipt"> '+'<a href="/administrator/index.php?option=com_mcadmin&linkId=88&formId=23329"'+' class="toolbar"> <span class="icon-32-receipt-list" title="Cancel"> </span> Form Receipt List </a> </td>');}}}}catch(e){}
+function viewTestTransactionPage()
+{window.open("/mc/quickForm/mgmt/noPermissionReceiptDetails.jsp","Error","height=200,width=510,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function viewTransactionPage(receiptId,transactionId,paymentTypeId)
+{var url="/mc/quickForm/receipt/viewTransaction.do?receiptId="+receiptId+"&transactionId="+transactionId+"&paymentTypeId="+paymentTypeId+"&formId="+23329;window.open(url,"Transaction","height=250,width=380,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=1");}
+function viewGatewayTransactionPage(receiptId,transactionId,paymentTypeId)
+{var url="/mc/quickForm/receipt/viewTransaction.do?receiptId="+receiptId+"&transactionId="+transactionId+"&paymentTypeId="+paymentTypeId+"&formId="+23329;window.open(url,"Transaction","height=320,width=380,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function retryTransaction(receiptId,transactionId,paymentTypeId,amount)
+{var url="/mc/adminUI/quickForm/payment/viewRetryEftTransaction.do?receiptId="+receiptId+"&transactionId="+transactionId+"&paymentTypeId="+paymentTypeId+"&formId="+23329+"&amount="+amount;if(confirm("Are you sure you want to retry this transaction?"))
+{window.location=url;}}
+function viewOfflineCreditCardPage(receiptId,transactionId,paymentTypeId)
+{var url="/mc/quickForm/receipt/viewTransaction.do?receiptId="+receiptId+"&transactionId="+transactionId+"&paymentTypeId="+paymentTypeId+"&formId="+23329;window.open(url,"Transaction","height=450,width=380,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function addTransaction(receiptId,invoice)
+{var url="/mc/quickForm/receipt/addTransaction.do?receiptId="+receiptId+"&formId="+23329;if(invoice)
+{url=url+"&invoice=true";}
+window.open(url,"Transaction","height=430,width=480,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function deleteTransaction(receiptId,transactionId,paymentTypeId)
+{if(confirm("Are you sure you want to delete this transaction?"))
+{window.location="/mc/adminUI/quickForm/receipt/deleteTransaction.do?receiptId="+receiptId+"&transactionId="+transactionId+"&paymentTypeId="+paymentTypeId+"&formId="+23329;}}
+function editRefund(receiptId,transactionId,windowHeight)
+{var url="/mc/quickForm/receipt/editRefund.do?receiptId="+receiptId+"&transactionId="+transactionId+"&formId="+23329;window.open(url,"Transaction","height="+windowHeight+",width=480,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function cancelRecurringTransaction(receiptId,recurringTransactionId)
+{if(confirm("Are you sure you want to cancel this transaction?"))
+{window.location="/mc/adminUI/quickForm/receipt/cancelRecurringTransaction.do?receiptId="+receiptId+"&recurringTransactionId="+recurringTransactionId+"&formId="+23329;}}
+function cancelAllRecurringTransaction(receiptId)
+{if(confirm("Are you sure you want to cancel all remaining recurring transactions?"))
+{window.location="/mc/adminUI/quickForm/receipt/cancelAllRecurringTransaction.do?receiptId="+receiptId+"&formId="+23329;}}
+function settleRecurringTransaction(receiptId)
+{if(confirm("Are you sure you want to settle the remaining recurring transaction balance?\n\n"+"$0.00"+" will be charged to the user's account."))
+{window.location="/mc/adminUI/quickForm/receipt/settleRecurringTransaction.do?receiptId="+receiptId+"&formId="+23329;}}
+function editPaymentInfo(receiptId)
+{var url="/mc/quickForm/receipt/editPaymentInfo.do?receiptId="+receiptId+"&formId="+23329;window.open(url,"PaymentInfo","height=450,width=480,screenX=0,screenLeft,screenY=0,screenTop=0,menubar=0,location=0,personalbar=0,toolbar=0,titlebar=0,status=0,scrollbars=0,resizable=0");}
+function viewInvoice(uuId)
+{window.parent.location.href="https://cmp.memberclicks.net/administrator/index.php?option=com_mcinvoice&view=invoice&id="+uuId+"&receiptId=6460595&returnType=1";}</script>
+
+
+
+
+
+
+
+
+
+        
+
+
+        
+
+        
+
+
+        
+
+        
+        <div class="adminSummaryArea">
+        <span class="adminSummaryHeader">
+            <table border="0" cellpadding="0" cellspacing="0" width="90%">
+            <tbody><tr>
+                <td class="adminSummaryHeaderText"><font color="#703637">FORGIVENESS - YOUR BODY IS A TEMPLE - Assignement 7 of 9</font></td>
+
+        
+        
+                <td align="right">&nbsp;&nbsp;
+                    <a href="https://cmp.memberclicks.net/mc/adminUI/quickForm/receipt/editReceiptSection.do?formId=23329&amp;receiptId=6460595&amp;pageId=109365&amp;receiptOrigin=0&amp;userId=24308196" onmouseover="setStatus('Edit Receipt Section');return true;" onmouseout="resetStatus();return true;" class="adminIconLink"><img src="editReceipt.do_files/edit.gif" style="margin-right:3px;" alt="edit" height="17" align="absmiddle" border="0" width="19">Edit</a>
+                </td>
+        
+        
+
+            </tr>
+            </tbody></table>
+        </span><br>
+
+            
+
+            
+
+                    <b>His First Name:</b>
+                    <span class="adminResponseClass">Clark</span><br>
+
+            
+
+                    <b>His Last Name:</b>
+                    <span class="adminResponseClass">KENT</span><br>
+
+            
+
+                    <b>His Email:</b>
+                    <span class="adminResponseClass">clark.kent@dailyplanet.com</span><br>
+
+            
+
+                    <b>Her First Name:</b>
+                    <span class="adminResponseClass">Lois</span><br>
+
+            
+
+                    <b>Her Last Name:</b>
+                    <span class="adminResponseClass">LANE</span><br>
+
+            
+
+                    <b>Her Email:</b>
+                    <span class="adminResponseClass">lois.lane@dailyplanet.com</span><br>
+
+            
+
+                    <b>Forgiveness - Your Body:</b>
+
+                    <span class="adminResponseClass">
+                        Yes<br>
+                    </span>
+
+            
+
+                    <b>Instructors:</b>
+
+                    <span class="adminResponseClass">
+                        CHRISTINE and Christian<br>
+                    </span>
+
+            
+
+            
+
+                    <b>Answer Key Three Questions:</b>
+                    <span class="adminResponseClass"></span><br>
+
+            
+
+        <br>
+        </div><br>
+        
+
+        
+
+        
+        <div class="adminSummaryArea">
+        <span class="adminSummaryHeader">
+            <table border="0" cellpadding="0" cellspacing="0" width="90%">
+            <tbody><tr>
+                <td class="adminSummaryHeaderText"><font color="#703637">FORGIVENESS:</font></td>
+
+        
+        
+                <td align="right">&nbsp;&nbsp;
+                    <a href="https://cmp.memberclicks.net/mc/adminUI/quickForm/receipt/editReceiptSection.do?formId=23329&amp;receiptId=6460595&amp;pageId=109369&amp;receiptOrigin=0&amp;userId=24308196" onmouseover="setStatus('Edit Receipt Section');return true;" onmouseout="resetStatus();return true;" class="adminIconLink"><img src="editReceipt.do_files/edit.gif" style="margin-right:3px;" alt="edit" height="17" align="absmiddle" border="0" width="19">Edit</a>
+                </td>
+        
+        
+
+            </tr>
+            </tbody></table>
+        </span><br>
+
+            
+
+            
+
+            
+
+            
+
+                    <b>1- FORGIVENESS = FREEDOM:</b>
+                    <span class="adminResponseClass">Forgiveness allows you to move past the wrong and grow a stronger relationship.</span><br>
+
+            
+
+            
+
+            
+
+            
+
+                    <b>2- JUSTICE VERSUS FORGIVENESS:</b>
+                    <span class="adminResponseClass">The peers want 
+justice and the woman wants forgiveness. Justice can be considered a 
+consequence for a wrong doing where forgiveness is asking for absolution
+ of a sin.   </span><br>
+
+            
+
+            
+
+            
+
+            
+
+                    <b>3- FORGIVENESS IN MARRIAGE:</b>
+                    <span class="adminResponseClass">Forgiveness is very important in a marriage. No one is perfect and there are going to be disagreements. </span><br>
+
+            
+
+            
+
+                    <b>4- ANYTHING UNFORGIVABLE? (his answer):</b>
+                    <span class="adminResponseClass">Yes, adultery. </span><br>
+
+            
+
+                    <b>4- ANYTHING UNFORGIVABLE? (her answer):</b>
+                    <span class="adminResponseClass">I agree with Andrew, adultery to me is unforgivable. </span><br>
+
+            
+
+            
+
+                    <b>5- RECONCILIATION:</b>
+                    <span class="adminResponseClass">Confession allows you to have light shown upon your sins. It could give you forgiveness in yourself.</span><br>
+
+            
+
+            
+
+        <br>
+        </div><br>
+        
+
+        
+
+
+        
+
+
+        
+
+        
+
+
+        
+
+        
+        <div class="adminSummaryArea">
+        <span class="adminSummaryHeader">
+            <table border="0" cellpadding="0" cellspacing="0" width="90%">
+            <tbody><tr>
+                <td class="adminSummaryHeaderText"><font color="#703637">YOUR BODY IS A TEMPLE</font></td>
+
+        
+        
+                <td align="right">&nbsp;&nbsp;
+                    <a href="https://cmp.memberclicks.net/mc/adminUI/quickForm/receipt/editReceiptSection.do?formId=23329&amp;receiptId=6460595&amp;pageId=109368&amp;receiptOrigin=0&amp;userId=24308196" onmouseover="setStatus('Edit Receipt Section');return true;" onmouseout="resetStatus();return true;" class="adminIconLink"><img src="editReceipt.do_files/edit.gif" style="margin-right:3px;" alt="edit" height="17" align="absmiddle" border="0" width="19">Edit</a>
+                </td>
+        
+        
+
+            </tr>
+            </tbody></table>
+        </span><br>
+
+            
+
+            
+
+            
+
+                    <b>6- UNDERSTAND THESE STATEMENTS:</b>
+                    <span class="adminResponseClass">Your body is a gift from God and it should be treated as one. </span><br>
+
+            
+
+            
+
+                    <b>7- IMMORALITY:</b>
+                    <span class="adminResponseClass">Immorality is sinning or committing immoral acts. Lying or cheating can be considered immoral acts. </span><br>
+
+            
+
+            
+
+                    <b>8- Watching porn and your relationship (his answer):</b>
+                    <span class="adminResponseClass">Yes, it can be hurtful by causing negative tension. </span><br>
+
+            
+
+                    <b>8- Watching porn and your relationship (her answer):</b>
+                    <span class="adminResponseClass">Yes, pornography can be damaging to a relationship. Watching pornography can cause insecurities between a couple.  </span><br>
+
+            
+
+            
+
+            
+
+                    <b>9- SAFEGUARD YOURSELF AGAINST PORNOGRAPHY:</b>
+                    <span class="adminResponseClass">You can safeguard 
+your home by selecting parental controls on TV/Computers. If you travel 
+for work, avoid those areas of town and pray for strength, If you are 
+hooked, find other "hobbies" to occupy your time and again pray for 
+strength and forgiveness. </span><br>
+
+            
+
+            
+
+                    <b>10- TEMPLE:</b>
+                    <span class="adminResponseClass">Christ has paid for your sins by giving his body therefore you should do your best to not sin. </span><br>
+
+            
+
+            
+
+        <br>
+        </div><br>
+        
+
+        
+
+
+        
+
+    
+
+
+<script type="text/javascript">var parentReceiptLink="";jQuery(function()
+{jQuery('#childReceiptDialog').dialog({bgiframe:true,autoOpen:false,resizable:false,modal:true,overlay:{backgroundColor:'#000',opacity:0.5},buttons:{Yes:function()
+{window.location=parentReceiptLink;jQuery(this).dialog('close');},No:function()
+{jQuery(this).dialog('close');}}});});</script>
+
+
+
+<script type="text/javascript">jQuery(function()
+{jQuery('#createInvoiceNotice').dialog({bgiframe:true,autoOpen:false,resizable:false,modal:true,overlay:{backgroundColor:'#000',opacity:0.5},buttons:{OK:function()
+{jQuery(this).dialog('close');}}});});</script>
+
+
+
+
+
+                <!-- END PAGE BODY -->
+            </td>
+            <td background="editReceipt.do_files/ab_r.gif"><img src="editReceipt.do_files/spacer.gif" height="10" border="0" width="22"></td>
+        </tr>
+        <tr>
+            <td width="18"><img src="editReceipt.do_files/ab_bl.gif" height="21" border="0" width="18"></td>
+            <td style="height:21px;background-position:0 0;background-repeat:repeat-x;" background="editReceipt.do_files/ab_b.gif"><img src="editReceipt.do_files/spacer.gif" height="21" border="0" width="22"></td>
+            <td width="22"><img src="editReceipt.do_files/ab_br.gif" height="21" border="0" width="22"></td>
+        </tr>
+    </tbody></table>
+</div>
+
+
+</div>
+
+
+<div aria-labelledby="ui-dialog-title-sessionExpiredDialog" role="dialog" tabindex="-1" class="ui-dialog ui-widget ui-widget-content ui-corner-all " style="display: none; z-index: 999999; outline: 0px none;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span id="ui-dialog-title-sessionExpiredDialog" class="ui-dialog-title">Attention!</span><a role="button" class="ui-dialog-titlebar-close ui-corner-all" href="#"><span class="ui-icon ui-icon-closethick">close</span></a></div><div class="ui-dialog-content ui-widget-content" id="sessionExpiredDialog" style=""></div></div><div aria-labelledby="ui-dialog-title-childReceiptDialog" role="dialog" tabindex="-1" class="ui-dialog ui-widget ui-widget-content ui-corner-all  ui-draggable" style="display: none; z-index: 1000; outline: 0px none;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span id="ui-dialog-title-childReceiptDialog" class="ui-dialog-title">Child Receipt</span><a role="button" class="ui-dialog-titlebar-close ui-corner-all" href="#"><span class="ui-icon ui-icon-closethick">close</span></a></div><div class="ui-dialog-content ui-widget-content" id="childReceiptDialog" style="">
+    <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+    <div>This receipt is tied to a parent receipt.  All edits should take place with that receipt.</div>
+    <br>
+    Would you like to edit the parent receipt?
+</div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button"><span class="ui-button-text">Yes</span></button><button role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button"><span class="ui-button-text">No</span></button></div></div></div><div aria-labelledby="ui-dialog-title-createInvoiceNotice" role="dialog" tabindex="-1" class="ui-dialog ui-widget ui-widget-content ui-corner-all  ui-draggable" style="display: none; z-index: 1000; outline: 0px none;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span id="ui-dialog-title-createInvoiceNotice" class="ui-dialog-title">Create Invoice</span><a role="button" class="ui-dialog-titlebar-close ui-corner-all" href="#"><span class="ui-icon ui-icon-closethick">close</span></a></div><div class="ui-dialog-content ui-widget-content" id="createInvoiceNotice" style="">
+    <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+    <div>The receipt balance is now different than the original amount 
+invoiced. Please create a new invoice or settle the balance to reflect 
+your changes.</div>
+</div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button"><span class="ui-button-text">OK</span></button></div></div></div></body></html>

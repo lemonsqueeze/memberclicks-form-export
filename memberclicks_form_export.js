@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name	 Memberclicks Form Export
 // @author	 lemonsqueeze
-// @version	 0.3
+// @version	 0.4
 // @downloadURL	 http://userscripts.org/scripts/source/175476.user.js
 // @namespace
 // @scriptsource
@@ -28,22 +28,37 @@ function assert(val, msg)
 var values = {};		// name/value pairs
 var names = [];			
 
+function new_field_name(title, existing_fields)
+{
+    var s = cleanup_whitespace(title);	// remove leading/trailing whitespace
+    s = s.toLowerCase();
+    s = s.replace(/:$/, '');		// remove trailing semicolon
+    s = s.replace(/ /g, '_');		// replace spaces by underscores
+    
+    s = s.slice(0, 37);			// truncate (40 chars max for word ...)
+    
+    // ensure it's unique, append number suffix in case of collision
+    var suffix = '';
+    for (var i = 2; existing_fields[s + suffix]; i++)
+	suffix = i;
+    s = s + suffix;
+    
+    return s;
+}
+
 function add_data(name, value)
 {
     values[name] = value;
     names.push(name);
 }
 
-function handle_data(name, value)
+function handle_data(title, value)
 {
-    name = cleanup_value(name);
-    name = name.toLowerCase();
-    name = name.replace(/:$/, '');		// remove trailing semicolon
-    name = name.replace(/ /g, '_');		// replace spaces by underscores
+    var name = new_field_name(title, values);
     add_data(name, value);
 }
 
-function cleanup_value(v)
+function cleanup_whitespace(v)
 {
     v = v.replace(/^[ \t\n]*/, '');		// remove leading whitespace
     v = v.replace(/[ \t\n]*$/, '');		// remove trailing whitespace
@@ -61,7 +76,7 @@ function extract_data()
 	    alert("field " + field.textContent + "has no value !");
 	    continue;
 	}
-	var value = cleanup_value(field.nextElementSibling.textContent);
+	var value = cleanup_whitespace(field.nextElementSibling.textContent);
 	handle_data(field.textContent, value);
     }
 }
@@ -112,7 +127,7 @@ function output_csv()
 
 function button_onclick()
 {
-    extract_data();
+    extract_data();    
     output_csv();
 }
 
