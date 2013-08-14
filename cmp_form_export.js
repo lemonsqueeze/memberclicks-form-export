@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CMP Form Export
 // @author       lemonsqueeze
-// @version      0.3
+// @version      0.4
 // @downloadURL  http://userscripts.org/scripts/source/175685.user.js
 // @namespace	 http://userscripts.org/scripts/source/175685.user.js
 // @scriptsource http://userscripts.org/scripts/source/175685.user.js
@@ -38,13 +38,16 @@ function new_field_name(title, existing_fields)
     s = s.slice(0, 37);			// truncate (40 chars max for word ...)
     
     // ensure it's unique, append letter in case of collision
-    var letters = "bcdefghijklmnopqrstuvwxyz";
-    var suffix = '';
-    for (var i = 0; existing_fields[s + suffix]; i++)
-	suffix = letters[i];
-    if (suffix == 'b')
-	rename_data(s, s + 'a');
-    s = s + suffix;
+    if (existing_fields[s] || existing_fields[s + 'b'])
+    {
+	var letters = "bcdefghijklmnopqrstuvwxyz";    	
+	var i;
+	for (i = 0; existing_fields[s + letters[i]]; i++)
+	{  }
+	if (letters[i] == 'b')
+	    rename_data(s, s + 'a');
+	s = s + letters[i];
+    }
     
     return s;
 }
