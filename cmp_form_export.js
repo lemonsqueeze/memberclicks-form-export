@@ -1,17 +1,17 @@
 // ==UserScript==
-// @name	 Memberclicks Form Export
-// @author	 lemonsqueeze
-// @version	 0.5
-// @downloadURL	 http://userscripts.org/scripts/source/175476.user.js
-// @namespace	 http://userscripts.org/scripts/source/175476.user.js
-// @scriptsource http://userscripts.org/scripts/source/175476.user.js
-// @published    2013-08-14 16:00
-// @description  Adds a button to export memberclicks forms (receipts) as CSV file
-// @include      https://*.memberclicks.net/*/adminUI/quickForm/receipt/editReceipt.do?*
-// @grant	 none
+// @name         CMP Form Export
+// @author       lemonsqueeze
+// @version      0.3
+// @downloadURL  http://userscripts.org/scripts/source/175685.user.js
+// @namespace	 http://userscripts.org/scripts/source/175685.user.js
+// @scriptsource http://userscripts.org/scripts/source/175685.user.js
+// @published    2013-08-14 16:40
+// @description  Adds a button to export CMP memberclicks forms (receipts) as CSV file
+// @include      https://cmp.memberclicks.net/*/adminUI/quickForm/receipt/editReceipt.do?*
+// @grant        none
 // ==/UserScript==
 
-var script_url = "http://userscripts.org/scripts/source/175476.user.js";
+var script_url = "http://userscripts.org/scripts/source/175685.user.js";
 
 /***************************************** extract answers ***************************************/
 
@@ -37,13 +37,27 @@ function new_field_name(title, existing_fields)
     
     s = s.slice(0, 37);			// truncate (40 chars max for word ...)
     
-    // ensure it's unique, append number suffix in case of collision
+    // ensure it's unique, append letter in case of collision
+    var letters = "bcdefghijklmnopqrstuvwxyz";
     var suffix = '';
-    for (var i = 2; existing_fields[s + suffix]; i++)
-	suffix = i;
+    for (var i = 0; existing_fields[s + suffix]; i++)
+	suffix = letters[i];
+    if (suffix == 'b')
+	rename_data(s, s + 'a');
     s = s + suffix;
     
     return s;
+}
+
+function rename_data(from, to)
+{
+    var tmp = values[from];
+    delete values[from];
+    values[to] = tmp;
+
+    for (var i = 0; i < names.length; i++)
+	if (names[i] == from)
+	    names[i] = to;
 }
 
 function add_data(name, value)
@@ -77,7 +91,15 @@ function extract_data()
 	    continue;
 	}
 	var value = cleanup_whitespace(field.nextElementSibling.textContent);
-	handle_data(field.textContent, value);
+	
+	var m = field.textContent.match(/^([0-9]+)-/);
+        if (!m)         // not a question
+            handle_data(field.textContent, value);
+        else
+        {
+            var n = m[1];       // question number
+            handle_data('answer' + n, value);
+        }
     }
 }
 
